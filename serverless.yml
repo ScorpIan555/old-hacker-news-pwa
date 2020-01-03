@@ -1,6 +1,7 @@
-org: scorpian555
-app: hacker-news-pwa
+# org: scorpian555
+# app: hacker-news-pwa
 service: hacker-news-pwa
+#
 custom:
   stage: ${opt:stage, self:provider.stage}
   environment: ${file(env.yml):${self:custom.stage}}
