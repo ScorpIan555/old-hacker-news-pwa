@@ -66,9 +66,9 @@ Resources:
                 Action:
                   - "mobileanalytics:PutEvents"
                   - "cognito-sync:*"
-                  # - "cognito-identity:*"
+                  - "cognito-identity:*"
                   # https://docs.aws.amazon.com/cognito/latest/developerguide/resource-permissions.html
-                  - "cognito-identity:HackerNewsIdentityPool${self:custom.stage}"
+                  # - "cognito-identity:HackerNewsIdentityPool${self:custom.stage}"
                   # "Resource": "arn:aws:cognito-identity:us-east-1:0123456789:identitypool/us-east-1:1a1a1a1a-ffff-1111-9999-12345678"
                 Resource: "*"
 
