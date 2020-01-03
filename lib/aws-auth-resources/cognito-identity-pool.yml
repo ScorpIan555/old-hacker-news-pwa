@@ -2,7 +2,7 @@
 
 # This page contains the configuration for the AWS Cognito Authorization & Authentication services, linked from the serverless.yml file in the project root
 
-##############
+###############
 
 # Additional helpful references from the AWS Documentation:
 # https://docs.aws.amazon.com/cognito/latest/developerguide/iam-roles.html
