@@ -1,0 +1,110 @@
+# Cognito Identity Pool Resource Page
+
+# This page contains the configuration for the AWS Cognito Authorization & Authentication services, linked from the serverless.yml file in the project root
+
+##############
+
+# Additional helpful references from the AWS Documentation:
+# https://docs.aws.amazon.com/cognito/latest/developerguide/iam-roles.html
+# https://docs.aws.amazon.com/apigateway/latest/developerguide/apigateway-control-access-policy-language-overview.html
+
+Resources:
+  # The federated identity for our user pool to auth with
+  CognitoIdentityPool:
+    Type: AWS::Cognito::IdentityPool
+    Properties:
+      # Generate a name based on the stage
+      IdentityPoolName: HackerNewsIdentityPool${self:custom.stage} # no special chars allowed
+      # Allow unathenticated users
+      AllowUnauthenticatedIdentities: true
+      # Link to User Pool and other ID providers (if any)
+      CognitoIdentityProviders:
+        # Declare a client id & provider name for each Id provider entity (user pool/social/etc)
+        - ClientId:
+            Ref: CognitoUserPoolClient # https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-cognito-userpoolclient.html
+          ProviderName:
+            Fn::GetAtt: ["CognitoUserPool", "ProviderName"]
+
+  # IAM roles
+  # https://docs.aws.amazon.com/cognito/latest/developerguide/iam-roles.html
+  CognitoIdentityPoolRoles:
+    Type: AWS::Cognito::IdentityPoolRoleAttachment
+    Properties:
+      IdentityPoolId:
+        Ref: CognitoIdentityPool
+      Roles: # Declare role name & arn here, define below
+        authenticated:
+          Fn::GetAtt: [CognitoAuthRole, Arn] # must be defined below
+        unauthenticated:
+          Fn::GetAtt: [CognitoUnauthedRole, Arn] # must be defined below
+
+  # IAM role used for authenticated users
+  CognitoAuthRole:
+    Type: AWS::IAM::Role # https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-iam-role.html
+    Properties:
+      Path: /
+      AssumeRolePolicyDocument: #  https://devops.stackexchange.com/questions/5094/what-is-the-purpose-of-assumerolepolicydocument-in-iam
+        Version: "2012-10-17"
+        Statement:
+          - Effect: "Allow"
+            Principal:
+              Federated: "cognito-identity.amazonaws.com"
+            Action:
+              - "sts:AssumeRoleWithWebIdentity" # https://docs.aws.amazon.com/STS/latest/APIReference/API_AssumeRoleWithWebIdentity.html
+            Condition:
+              StringEquals:
+                "cognito-identity.amazonaws.com:aud":
+                  Ref: CognitoIdentityPool
+              "ForAnyValue:StringLike":
+                "cognito-identity.amazonaws.com:amr": authenticated
+      Policies: # https://docs.aws.amazon.com/apigateway/latest/developerguide/apigateway-authorization-flow.html#apigateway-authorization-flow-iam
+        - PolicyName: "CognitoAuthorizedPolicy"
+          PolicyDocument:
+            Version: "2012-10-17"
+            Statement:
+              - Effect: "Allow"
+                Action:
+                  - "mobileanalytics:PutEvents"
+                  - "cognito-sync:*"
+                  # - "cognito-identity:*"
+                  # https://docs.aws.amazon.com/cognito/latest/developerguide/resource-permissions.html
+                  - "cognito-identity:HackerNewsIdentityPool${self:custom.stage}"
+                  # "Resource": "arn:aws:cognito-identity:us-east-1:0123456789:identitypool/us-east-1:1a1a1a1a-ffff-1111-9999-12345678"
+                Resource: "*"
+
+  # IAM role used for unauthenticated users
+  CognitoUnauthedRole:
+    Type: AWS::IAM::Role # https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-iam-role.html
+    Properties:
+      Path: /
+      AssumeRolePolicyDocument:
+        Version: "2012-10-17"
+        Statement:
+          - Effect: "Allow"
+            Principal:
+              Federated: "cognito-identity.amazonaws.com"
+            Action:
+              - "sts:AssumeRoleWithWebIdentity"
+            Condition:
+              StringEquals:
+                "cognito-identity.amazonaws.com:aud":
+                  Ref: CognitoIdentityPool
+              "ForAnyValue:StringLike":
+                "cognito-identity.amazonaws.com:amr": unauthenticated
+      Policies:
+        - PolicyName: "CognitoAuthorizedPolicy"
+          PolicyDocument:
+            Version: "2012-10-17"
+            Statement:
+              - Effect: "Allow"
+                Action:
+                  - "mobileanalytics:PutEvents"
+                  - "cognito-sync:*"
+                  - "cognito-identity:*"
+                Resource: "*"
+
+# Print out the Id of the Identity Pool that is created
+Outputs:
+  IdentityPoolId:
+    Value:
+      Ref: CognitoIdentityPool

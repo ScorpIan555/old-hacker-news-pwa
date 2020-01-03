@@ -1,0 +1,26 @@
+org: scorpian555
+app: hacker-news-pwa
+service: hacker-news-pwa
+custom:
+  stage: ${opt:stage, self:provider.stage}
+  environment: ${file(env.yml):${self:custom.stage}}
+
+provider:
+  name: aws
+  runtime: nodejs12.x
+  stage: dev
+  region: us-east-1
+  environment: # set env variables
+    APP_SECRET: ${self:custom.environment.APP_SECRET}
+
+hacker-news-pwa: # set domain & subdomain
+  # https://serverless.com/blog/serverless-nextjs/
+  component: serverless-next.js
+  inputs:
+    domain: ["hacker-news-pwa", "iandaley.ninja"]
+
+# Create resources with separate CloudFormation templates
+resources:
+  # Cognito
+  - ${file(lib/aws-auth-resources/cognito-user-pool.yml)}
+  - ${file(lib/aws-auth-resources/cognito-identity-pool.yml)}

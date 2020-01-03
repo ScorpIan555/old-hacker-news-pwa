@@ -22,6 +22,7 @@
   },
   "license": "ISC",
   "devDependencies": {
-    "babel-plugin-graphql-tag": "^2.5.0"
+    "babel-plugin-graphql-tag": "^2.5.0",
+    "serverless-next.js": "^1.7.3"
   }
 }

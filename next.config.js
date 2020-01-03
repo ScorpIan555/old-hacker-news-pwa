@@ -1,5 +1,4 @@
-// module.exports = {
-//     devIndicators: {
-//       autoPrerender: false, // https://nextjs.org/docs/old#automatic-static-optimization-indicator
-//     },
-//   }
+// next.config.js
+module.exports = {
+  target: "serverless"
+};
