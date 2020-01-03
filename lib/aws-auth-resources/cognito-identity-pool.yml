@@ -74,7 +74,8 @@ Resources:
 
   # IAM role used for unauthenticated users
   CognitoUnauthedRole:
-    Type: AWS::IAM::Role # https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-iam-role.html
+    # https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-iam-role.html
+    Type: AWS::IAM::Role
     Properties:
       Path: /
       AssumeRolePolicyDocument:
