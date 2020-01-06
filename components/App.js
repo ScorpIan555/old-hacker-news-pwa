@@ -3,13 +3,13 @@ export default ({ children }) => (
     {children}
     <style jsx global>{`
       * {
-        font-family: Menlo, Monaco, 'Lucida Console', 'Liberation Mono',
-          'DejaVu Sans Mono', 'Bitstream Vera Sans Mono', 'Courier New',
+        font-family: Menlo, Monaco, "Lucida Console", "Liberation Mono",
+          "DejaVu Sans Mono", "Bitstream Vera Sans Mono", "Courier New",
           monospace, serif;
       }
       body {
         margin: 0;
-        padding: 25px 50px;
+        padding: 0px 50px 0px 50px;
       }
       a {
         color: #22bad9;
@@ -42,4 +42,4 @@ export default ({ children }) => (
       }
     `}</style>
   </main>
-)
+);

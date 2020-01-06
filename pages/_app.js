@@ -21,14 +21,20 @@ class MyApp extends App {
   }
 
   async componentDidMount() {
-    console.log("AwsAuthConfig::", AwsAuthConfig);
-    try {
-      await Auth.currentCredentials()
-        .then(response => console.log("auth.res::", response))
-        .catch(err => console.log("err::", err));
-    } catch (error) {
-      console.error(error);
-    }
+    // console.log("AwsAuthConfig::", AwsAuthConfig);
+    // try {
+    //   await Auth.currentCredentials()
+    //     .then(response => console.log("auth.res::", response))
+    //     .catch(err => console.log("err::", err));
+    // } catch (error) {
+    //   console.error(error);
+    // }
+  }
+
+  componentDidCatch(error, errorInfo) {
+    console.log("Custom error handling!:::", error);
+    // This is needed to render errors correctly in dev/prod
+    super.componentDidCatch(error, errorInfo);
   }
 
   render() {
