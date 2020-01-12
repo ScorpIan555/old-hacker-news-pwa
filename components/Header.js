@@ -34,9 +34,12 @@ const Header = ({ router: { pathname } }) => (
     <Link href="/about">
       <a className={pathname === "/about" ? "is-active" : ""}>submit</a>
     </Link>
-    <Link href="/login" className="login">
-      <a className={pathname === "/about" ? "is-active" : ""}>login</a>
-    </Link>
+    <div className="navbar-auth">
+      <Link href="/login">
+        <a className={pathname === "/about" ? "is-active" : ""}>login</a>
+      </Link>
+    </div>
+
     <style jsx>{`
       header {
         margin-bottom: 25px;
@@ -51,13 +54,16 @@ const Header = ({ router: { pathname } }) => (
         text-decoration: underline;
       }
       .login {
-        position: absolute;
-        right: 0px;
-        left: 300px;
-        background-color: blue;
+        flex: flex-end;
+        background-color: "blue";
       }
       .flex-container {
         display: flex;
+      }
+      .navbar-auth {
+        position: absolute;
+        right: 0;
+        padding-right: 25px;
       }
     `}</style>
   </header>

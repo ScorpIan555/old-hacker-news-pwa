@@ -1,0 +1,30 @@
+# serverless.yml
+
+service: hacker-news-pwa-gql-server
+
+# serverless-webpack configuration
+# Enable auto-packing of external modules
+custom:
+  # Our stage is based on what is passed in when running serverless
+  # commands. Or fallsback to what we have set in the provider section.
+  stage: ${opt:stage, self:provider.stage}
+  # Load secret env variables based on stage
+  environment: ${file(env.yml):${self:custom.stage}, file(env.yml):default}
+
+provider:
+  name: aws
+  runtime: nodejs12.x
+  stage: dev
+  region: us-east-1
+  # available under process.env
+  environment:
+    someVar: ${self:custom.someVar}
+
+# lambda function configurations
+functions:
+  - ${file(lib/aws-resources/lambda-functions.yml)}
+# # Create resources with separate CloudFormation templates
+# resources:
+#   # Cognito
+#   - ${file(lib/aws-resources/cognito-user-pool.yml)}
+#   - ${file(lib/aws-resources/cognito-identity-pool.yml)}

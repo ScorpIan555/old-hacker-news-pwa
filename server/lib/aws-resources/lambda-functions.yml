@@ -1,0 +1,19 @@
+# Lambda function definition
+
+# Docs for basic integration testing: https://serverless.com/framework/docs/providers/aws/cli-reference/invoke-local/#aws---invoke-local
+graphql:
+  # this is formatted as <FILENAME>.<HANDLER>
+  handler: graphql.graphqlHandler
+  events:
+    # https://serverless.com/framework/docs/providers/fn/events/http/#fn-http-events
+    - http:
+        path: graphql
+        method: post
+        cors: true
+        # authorizer: aws_iam
+
+    - http:
+        path: graphql
+        method: get
+        cors: true
+        # authorizer: aws_iam
