@@ -54,6 +54,11 @@ const server = new ApolloServer({
   })
 });
 
+const functionName = () => {
+  console.log("functionName:::", "functionName");
+  return "it is alive!";
+};
+
 exports.graphqlHandler = server.createHandler({
   cors: {
     origin: "*",
