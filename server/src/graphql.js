@@ -4,7 +4,7 @@ const { ApolloServer } = require("apollo-server-lambda");
 const { resolvers } = "./resolvers";
 const { typeDefs } = "./type-defs";
 
-export const server = new ApolloServer({
+const server = new ApolloServer({
   typeDefs,
   resolvers,
   context: ({ event, context }) => ({
