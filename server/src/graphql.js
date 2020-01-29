@@ -1,5 +1,5 @@
 // graphql.js
-import { server } from "./index";
+const { server } = "./index";
 
 exports.graphqlHandler = server.createHandler({
   cors: {
