@@ -162,7 +162,7 @@
                   "Action": [
                     "mobileanalytics:PutEvents",
                     "cognito-sync:*",
-                    "cognito-identity:HackerNewsIdentityPooldev"
+                    "cognito-identity:*"
                   ],
                   "Resource": "*"
                 }
